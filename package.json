@@ -1,0 +1,21 @@
+{
+  "name": "cube-attack",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "start": "node server.mjs",
+    "preview": "vite preview",
+    "validate": "node scripts/validate.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.59.1",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.4"
+  },
+  "dependencies": {
+    "phaser": "^3.90.0"
+  }
+}
