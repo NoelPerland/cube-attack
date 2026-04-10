@@ -67,8 +67,10 @@ const server = createServer(async (request, response) => {
   try {
     const requestUrl = new URL(request.url ?? '/', 'http://127.0.0.1');
     const filePath = resolveFilePath(requestUrl.pathname);
+    const isHtmlRequest =
+      requestUrl.pathname === '/' || path.extname(requestUrl.pathname).toLowerCase() === '.html';
 
-    if (existsSync(filePath) && statSync(filePath).isFile()) {
+    if (!isHtmlRequest && existsSync(filePath) && statSync(filePath).isFile()) {
       response.writeHead(200, { 'Content-Type': getContentType(filePath) });
       createReadStream(filePath).pipe(response);
       return;
