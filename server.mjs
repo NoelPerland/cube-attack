@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.join(__dirname, 'dist');
 const port = Number.parseInt(process.env.PORT ?? '8080', 10);
+const appUrl = process.env.APP_URL;
 
 const MIME_TYPES = new Map([
   ['.css', 'text/css; charset=utf-8'],
@@ -32,11 +33,34 @@ function resolveFilePath(urlPath) {
   return path.join(distDir, safePath);
 }
 
-async function sendIndex(response) {
+function escapeHtmlAttribute(value) {
+  return value.replaceAll('&', '&amp;').replaceAll('"', '&quot;');
+}
+
+function getPublicOrigin(request) {
+  const forwardedProto = request.headers['x-forwarded-proto'];
+  const protocol = typeof forwardedProto === 'string' && forwardedProto.length > 0
+    ? forwardedProto.split(',')[0].trim()
+    : 'https';
+  const host = request.headers.host;
+
+  if (typeof host === 'string' && host.length > 0) {
+    return `${protocol}://${host}`;
+  }
+
+  if (typeof appUrl === 'string' && appUrl.length > 0) {
+    return appUrl;
+  }
+
+  return `http://127.0.0.1:${port}`;
+}
+
+async function sendIndex(request, response) {
   const indexPath = path.join(distDir, 'index.html');
   const html = await readFile(indexPath, 'utf8');
+  const publicUrl = escapeHtmlAttribute(getPublicOrigin(request));
   response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-  response.end(html);
+  response.end(html.replaceAll('__APP_URL__', publicUrl));
 }
 
 const server = createServer(async (request, response) => {
@@ -50,7 +74,7 @@ const server = createServer(async (request, response) => {
       return;
     }
 
-    await sendIndex(response);
+    await sendIndex(request, response);
   } catch (error) {
     response.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
     response.end(error instanceof Error ? error.message : 'Unexpected server error.');
