@@ -4,7 +4,7 @@ A Phaser/TypeScript browser runner. Source branch: main. No secrets or backend a
 
 ## Continue on another device or with an AI
 
-Use Node24. Run `npm ci`, `npm run dev`, then `npm run build` for production. The entry is `src/main.ts`; scenes are under `src/scenes`. Preserve the current game rules and art.
+Use Node24. Run `npm ci`, `npm run dev`, then `npm run build` for production. The entry is `src/main.ts`; scenes are under `src/game/scenes`. Preserve the current game rules and art.
 
 Space/Enter/click starts a run; Space or tap jumps. Results offer retry and return to title. Existing best-run progress must remain intact.
 
@@ -13,3 +13,7 @@ The mobile repair uses Phaser FIT with NO_CENTER because CSS already centers the
 Check actual start, jump, collision, retry, audio and resize/rotation at desktop1366x768/1920x1080 and phone390x844/360x640. Phone emulation does not prove real-device compatibility or full-level completion.
 
 Source stays on main; GitHub Pages serves built files from gh-pages. Build first, inspect gameplay, then publish dist contents and .nojekyll to that branch. Never overwrite source with compiled files.
+
+## Completion regression
+
+Run `npm run verify:completion` after `npm ci`. It starts its own local development server, drives actual keyboard jumps using read-only authored guide positions, asserts level clear and completion persistence after reload, and closes server/browser. Set `CHROME_PATH` for a different Chrome/Chromium installation. Late guide positions were corrected after early jumps fell into pits or landed on spike rows; physics, obstacle layout and art are unchanged. Full guided keyboard completion passes; this does not measure human difficulty or physical-phone feel.

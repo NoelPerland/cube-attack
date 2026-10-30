@@ -95,8 +95,8 @@ export function createLevelData(): LevelData {
   };
 
   const guideJumps = [
-    760, 1230, 1730, 2180, 2760, 3290, 3930, 4380, 5010, 5630, 6290, 7465, 7960,
-    8485, 9050, 9600, 10720, 11300, 11780,
+    760, 1230, 1730, 2180, 2760, 3290, 3930, 4380, 5010, 5630, 6290, 7465, 7990,
+    8485, 9120, 9600, 10800, 11340, 11810,
   ];
 
   const groundSegments = buildGroundSegments(pits, goal.x + 420);
