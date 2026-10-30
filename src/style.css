@@ -36,7 +36,7 @@ body {
   height: 100svh;
   display: grid;
   place-items: center;
-  padding: 14px;
+  padding: 0;
 }
 
 canvas {
